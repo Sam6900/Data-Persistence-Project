@@ -25,7 +25,12 @@ public class MainManager : MonoBehaviour
     {
         if (GameManager.Instance != null)
         {
-            BestScoreText.text = "Best Score : " + GameManager.Instance.PlayerName + " : " + GameManager.Instance.PlayerScore;
+            if (GameManager.Instance.BestPlayerName == null)
+            {
+                GameManager.Instance.BestPlayerName = GameManager.Instance.PlayerName;
+                GameManager.Instance.PlayerScore = 0;
+            }
+            BestScoreText.text = "Best Score : " + GameManager.Instance.BestPlayerName + " : " + GameManager.Instance.PlayerScore;
         }
 
         const float step = 0.6f;
@@ -78,9 +83,10 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
-        if(GameManager.Instance != null)
+        if(GameManager.Instance != null && GameManager.Instance.PlayerScore < m_Points)
         {
             GameManager.Instance.PlayerScore = m_Points;
+            GameManager.Instance.BestPlayerName = GameManager.Instance.PlayerName;
             GameManager.Instance.SavePlayerData();
         }
     }
